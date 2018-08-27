@@ -38,11 +38,11 @@ RSpec.describe Config do
         end
       end
     end
-    expect(config.respond_to?(house)).to eq('home sweet home')
+    expect(config.respond_to?(house)).to eq(false)
   end
 
   it 'Run without any params' do
-    expect(Config::Config.build).to raise_error(NameError)
+    expect { Config::Config.build }.to raise_error(ArgumentError)
   end
 
   it 'it return always true' do
