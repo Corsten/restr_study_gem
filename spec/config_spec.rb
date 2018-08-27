@@ -1,14 +1,4 @@
-
-
 RSpec.describe Config do
-  it "has a version number" do
-    expect(Config::VERSION).not_to be nil
-  end
-
-  # it "does something useful" do
-  #   expect(false).to eq(true)
-  # end
-
   it 'can store one int' do
     config = Config::Config.build do
       one 1
@@ -38,24 +28,24 @@ RSpec.describe Config do
 
   it 'Have not this key' do
     config = Config::Config.build do
-      ebal do
-        ya do
-          vrot do
-            eti do
-              testi true
+      country do
+        state do
+          city do
+            street do
+              house 'home sweet home'
             end
           end
         end
       end
     end
-    expect(config.respond_to?(love)).to eq(false)
+    expect(config.respond_to?(house)).to eq('home sweet home')
   end
 
   it 'Run without any params' do
     expect(Config::Config.build).to raise_error(NameError)
   end
 
-  it "it return true always" do
+  it 'it return always true' do
     expect(true).to eq(true)
   end
 end
