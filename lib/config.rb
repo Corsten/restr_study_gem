@@ -18,7 +18,7 @@ module Config
     end
 
     def method_missing(name, *args, &block)
-      super if args.nil? && block.nil?
+      super if args[0].nil? && block.nil?
 
       if respond_to_missing?(name)
         self.singleton_class.define_method(name) { |data = @data| return data[name.to_sym] }
