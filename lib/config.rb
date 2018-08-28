@@ -4,32 +4,25 @@ require "pry"
 module Config
   class Config
     def initialize(&block)
-      @hash = {}
+      @data = {}
       instance_eval &block
     end
 
     def self.build(&block)
-      raise ArgumentError, 'Argument is not given' unless block_given?
+      raise ArgumentError, 'Argument or block is not given' unless block_given?
       Config.new(&block)
     end
 
     def respond_to_missing?(name)
-      @hash.key?(name.to_sym)
+      !@data.key?(name.to_sym)
     end
 
     def method_missing(name, *args, &block)
-      if !respond_to_missing?(name) && args[0]
-        @hash[name.to_sym] = args[0]
-        define_singleton_method(name) do |hash = @hash|
-          hash[name.to_sym]
-        end
-      elsif !block.nil?
-        define_singleton_method(name) do |hash = @hash|
-          hash[name.to_sym]
-        end
-        @hash[name.to_sym] = Config.build(&block)
-      else
-        super
+      super if args.nil? && block.nil?
+
+      if respond_to_missing?(name)
+        self.singleton_class.define_method(name) { |data = @data| return data[name.to_sym] }
+        @data[name.to_sym] = args[0] || Config.build(&block)
       end
     end
   end
