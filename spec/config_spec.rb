@@ -22,6 +22,7 @@ RSpec.describe Config do
         third 33
       end
     end
+
     expect(config.tree.node.surprise).to eq('marat')
     expect(config.tree.third).to eq(33)
   end
@@ -38,7 +39,9 @@ RSpec.describe Config do
         end
       end
     end
-    expect(config.respond_to?(house)).to eq(false)
+    #puts config.methods.grep(/country/)
+    #puts config.singleton_methods.grep(/country/)
+    expect { config.country.state.city.housenumber }.to raise_error(NoMethodError)
   end
 
   it 'Run without any params' do
