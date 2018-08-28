@@ -1,11 +1,11 @@
-require "config/version"
-require "pry"
+require 'config/version'
 
 module Config
+  #Make hash and method for work with them from block
   class Config
     def initialize(&block)
       @data = {}
-      instance_eval &block
+      instance_eval(&block)
     end
 
     def self.build(&block)
@@ -20,10 +20,10 @@ module Config
     def method_missing(name, *args, &block)
       super if args[0].nil? && block.nil?
 
-      if respond_to_missing?(name)
-        self.singleton_class.define_method(name) { |data = @data| return data[name.to_sym] }
-        @data[name.to_sym] = args[0] || Config.build(&block)
-      end
+      return unless respond_to_missing?(name)
+
+      singleton_class.define_method(name) { |data = @data| data[name.to_sym] }
+      @data[name.to_sym] = args[0] || Config.build(&block)
     end
   end
 end
